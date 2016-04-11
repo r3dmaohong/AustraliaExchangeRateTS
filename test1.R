@@ -63,3 +63,26 @@ for(i in 547:length(date)){
 
 plot.ts(ts(fe_df[,2]))
 plot.ts(diff(ts(fe_df[,2]),differences=1))
+
+
+fes=fe_df[,2]
+fests<- ts(fes,start = c(1866))
+plot.ts(fests)
+festsdiff<-diff(fests,differences=1)
+plot.ts(festsdiff)
+festsdiff2<-diff(fests,differences=2)
+plot.ts(festsdiff2)
+acf(festsdiff2,lag.max=20)
+acf(festsdiff2,lag.max=20,plot=FALSE)
+pacf(festsdiff2,lag.max=20)
+pacf(festsdiff2,lag.max=20,plot=FALSE)
+fesarima<-arima(fests,order=c(1,2,5))
+fesarima
+
+fesarimaforecast<-forecast.Arima(fesarima,h=5,level=c(99.5))
+fesarimaforecast
+plot.forecast(fesarimaforecast)##plot.forecast(fesarimaforecast$residuals)
+acf(fesarimaforecast$residuals,lag.max=20)
+Box.test(fesarimaforecast$residuals, lag=20, type="Ljung-Box")
+plot.ts(fesarimaforecast$residuals)
+plotForecastErrors(fesarimaforecast$residuals)
